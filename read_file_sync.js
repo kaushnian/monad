@@ -1,4 +1,4 @@
-import fs from 'fs';
+const fs = require('fs');
 
 const add1 = x => x + 1;
 const mul3 = x => x * 3;
