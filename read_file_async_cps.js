@@ -40,3 +40,36 @@ const readFileContentHOF = composeHOF(readFileHOF, readFileHOF);
 readFileContentHOF('./file1')(result => {
   console.log(result);
 });
+
+// Exec object
+const readFileExec = path => {
+  return {
+    exec: cb => {
+      readFileCPS(path, cb);
+    }
+  };
+};
+
+const composeExec = (g, f) => {
+  return x => {
+    return {
+      exec: cb => {
+        g(x).exec(y => {
+          f(y).exec(cb);
+        });
+      }
+    };
+  };
+};
+
+const readFileContentExec = composeExec(readFileExec, readFileExec);
+readFileContentExec('file1').exec(result => console.log(result));
+
+// Create exec object
+const createExecObj = exec => ({ exec });
+
+const readFileExec2 = path => {
+  return createExecObj(cb => {
+    readFileCPS(path, cb);
+  });
+};
