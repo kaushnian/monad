@@ -73,3 +73,15 @@ const readFileExec2 = path => {
     readFileCPS(path, cb);
   });
 };
+
+//The same as ComposeExec but uses execObj instead of a function.
+const bindExec = (execObj, f) => {
+  return createExecObj(cb => {
+    execObj.exec(y => {
+      f(y).exec(cb);
+    });
+  });
+};
+
+const readFile2Exec2 = bindExec(readFileExec2('./file1'), readFileExec2);
+readFile2Exec2.exec(result => console.log(result));
